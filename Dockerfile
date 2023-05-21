@@ -35,6 +35,7 @@ RUN apt-get update -qq \
       libxfixes3 \
       libxkbcommon0 \
       libxrandr2 \
+      postgresql-client \
       wget \
       xdg-utils \
     && wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
