@@ -1,0 +1,57 @@
+name: Build and push image
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [synchronize, opened]
+  schedule:
+    - cron: '54 07 12 * *' # on 12th day of every month at 07:54
+
+jobs:
+  build-push:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - ruby-version: "3.2.2"
+          - ruby-version: "3.1.4"
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v2
+        with:
+          install: true
+      - name: Cache Docker layers
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-dev-${{ matrix.ruby-version }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-dev-${{ matrix.ruby-version }}
+            ${{ runner.os }}-buildx-dev
+      - name: Login to GitHub Container Registry
+        if:   github.event_name != 'pull_request'
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: $
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build Docker image
+        id: docker_build
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: Dockerfile
+          pull: true
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: |
+            ghcr.io/blish/ruby-ci:${{ matrix.ruby-version }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
+          build-args: |
+            RUBY_VERSION=${{ matrix.ruby-version }}
