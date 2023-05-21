@@ -6,7 +6,9 @@ FROM ghcr.io/blish/fullstaq-ruby:${RUBY_VERSION}-${VARIANT} as base
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN apt-get update -qq \
     && apt-get install -y --no-install-recommends \
+      build-essential \
       fonts-liberation \
+      git \
       imagemagick \
       libasound2 \
       libatk-bridge2.0-0 \
@@ -22,6 +24,7 @@ RUN apt-get update -qq \
       libnspr4 \
       libnss3 \
       libpango-1.0-0 \
+      libpq-dev \
       libu2f-udev \
       libvulkan1 \
       libx11-6 \
