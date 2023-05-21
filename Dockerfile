@@ -7,6 +7,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN apt-get update -qq \
     && apt-get install -y --no-install-recommends \
       fonts-liberation \
+      imagemagick \
       libasound2 \
       libatk-bridge2.0-0 \
       libatk1.0-0 \
