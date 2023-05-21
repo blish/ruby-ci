@@ -43,6 +43,14 @@ RUN apt-get update -qq \
     && rm -rf /var/lib/apt/lists \
     && rm -fr /var/cache/apt
 
+ARG NODE_VERSION=16
+ARG YARN_VERSION=1.22.19
+
+RUN curl https://get.volta.sh | bash
+ENV VOLTA_HOME /root/.volta
+ENV PATH $VOLTA_HOME/bin:/usr/local/bin:$PATH
+RUN volta install node@${NODE_VERSION} yarn@${YARN_VERSION}
+
 RUN gem install bundler --no-document
 
 CMD [ "google-chrome", "-v" ]
