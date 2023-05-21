@@ -54,4 +54,5 @@ RUN volta install node@${NODE_VERSION} yarn@${YARN_VERSION}
 
 RUN gem install bundler --no-document
 
-CMD [ "google-chrome", "-v" ]
+ENV DISPLAY=":0"
+CMD ["/bin/bash"]
