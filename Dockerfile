@@ -40,4 +40,6 @@ RUN apt-get update -qq \
     && rm -rf /var/lib/apt/lists \
     && rm -fr /var/cache/apt
 
+RUN gem install bundler --no-document
+
 CMD [ "google-chrome", "-v" ]
