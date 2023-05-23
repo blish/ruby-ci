@@ -16,7 +16,6 @@ RUN apt-get update -qq \
       imagemagick \
       libpq-dev \
       postgresql-client \
-      xvfb \
     && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists \
     && rm -rf /var/cache/apt
@@ -31,9 +30,4 @@ RUN volta install node@${NODE_VERSION} yarn@${YARN_VERSION}
 
 RUN gem install bundler --no-document
 
-ENV DISPLAY=":99"
-RUN	printf '#!/bin/sh\nXvfb :99 -screen 0 1280x1024x24 &\nexec "$@"\n' > /docker-entrypoint.sh && \
-    chmod +x /docker-entrypoint.sh
-
-ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["/bin/bash"]
